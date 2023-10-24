@@ -24,8 +24,10 @@ class Post(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
-    tags = models.ManyToManyField(Tag, blank=True)
+    author = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="posts"
+    )
+    tags = models.ManyToManyField(Tag, blank=True, related_name="posts")
     picture = models.ImageField(upload_to=post_image_file_path, blank=True, null=True)
 
     class Meta:
@@ -38,8 +40,10 @@ class Post(models.Model):
 class Comment(models.Model):
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="comments")
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="comments"
+    )
 
     class Meta:
         ordering = ["-created_at"]
@@ -49,8 +53,10 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="likes")
+    user = models.ForeignKey(
+        get_user_model(), on_delete=models.CASCADE, related_name="likes"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
