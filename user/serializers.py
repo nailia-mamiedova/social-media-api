@@ -38,6 +38,7 @@ class UserCreateSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = (
             "email",
+            "username",
             "password",
         )
 

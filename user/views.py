@@ -20,6 +20,15 @@ class UserViewSet(
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        queryset = self.queryset
+
+        username = self.request.query_params.get("username")
+        if username:
+            queryset = queryset.filter(username__icontains=username)
+
+        return queryset
+
     def get_serializer_class(self):
         if self.action == "retrieve":
             return UserDetailSerializer
