@@ -7,6 +7,10 @@ from user.views import (
     UserViewSet,
     LoginUserView,
     LogoutUserView,
+    AddFollower,
+    RemoveFollower,
+    MyFollowersList,
+    MyFollowingList,
 )
 
 route = routers.DefaultRouter()
@@ -17,6 +21,10 @@ urlpatterns = [
     path("me/", ManageUserView.as_view(), name="manage"),
     path("login/", LoginUserView.as_view(), name="login"),
     path("logout/", LogoutUserView.as_view(), name="logout"),
+    path("follow/<int:pk>/", AddFollower.as_view(), name="follow"),
+    path("unfollow/<int:pk>/", RemoveFollower.as_view(), name="unfollow"),
+    path("followers/", MyFollowersList.as_view(), name="followers"),
+    path("following/", MyFollowingList.as_view(), name="following"),
     path("", include(route.urls)),
 ]
 
