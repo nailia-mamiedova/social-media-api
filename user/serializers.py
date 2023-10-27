@@ -46,6 +46,21 @@ class UserCreateSerializer(UserSerializer):
         return get_user_model().objects.create_user(**validated_data)
 
 
+class UserListSerializer(UserSerializer):
+    follow_unfollow = serializers.HyperlinkedIdentityField(
+        view_name="user:follow-unfollow",
+    )
+
+    class Meta:
+        model = get_user_model()
+        fields = (
+            "username",
+            "first_name",
+            "last_name",
+            "follow_unfollow",
+        )
+
+
 class UserDetailSerializer(UserSerializer):
     class Meta:
         model = get_user_model()
@@ -58,4 +73,5 @@ class UserDetailSerializer(UserSerializer):
             "bio",
             "picture",
             "is_staff",
+            "follow_unfollow",
         )

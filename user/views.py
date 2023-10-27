@@ -9,7 +9,12 @@ from rest_framework.utils import json
 from rest_framework.views import APIView
 
 from user.models import User
-from user.serializers import UserSerializer, UserCreateSerializer, UserDetailSerializer
+from user.serializers import (
+    UserSerializer,
+    UserCreateSerializer,
+    UserDetailSerializer,
+    UserListSerializer,
+)
 
 
 class UserViewSet(
@@ -30,6 +35,9 @@ class UserViewSet(
         return queryset
 
     def get_serializer_class(self):
+        if self.action == "list":
+            return UserListSerializer
+
         if self.action == "retrieve":
             return UserDetailSerializer
 
@@ -90,18 +98,16 @@ class LogoutUserView(APIView):
         return Response("User Logged out successfully")
 
 
-class AddFollower(APIView):
+class FollowUnfollow(APIView):
     def post(self, request, pk, *args, **kwargs):
         profile = User.objects.get(pk=pk)
+
+        if request.user in profile.followers.all():
+            profile.followers.remove(request.user)
+            return Response("You unfollowed user - " + profile.username)
+
         profile.followers.add(request.user)
         return Response("You followed user - " + profile.username)
-
-
-class RemoveFollower(APIView):
-    def post(self, request, pk, *args, **kwargs):
-        profile = User.objects.get(pk=pk)
-        profile.followers.remove(request.user)
-        return Response("You unfollowed user - " + profile.username)
 
 
 class MyFollowersList(generics.ListAPIView):
