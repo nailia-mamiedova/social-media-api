@@ -1,4 +1,6 @@
 from django.db.models import Q
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -14,6 +16,10 @@ from post.serializers import (
 from post.permissions import IsAuthorOrReadOnly
 
 
+@extend_schema_view(
+    list=extend_schema(description="Display all tags"),
+    create=extend_schema(description="Create new tag"),
+)
 class TagViewSet(
     mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
@@ -21,6 +27,20 @@ class TagViewSet(
     serializer_class = TagSerializer
 
 
+@extend_schema_view(
+    list=extend_schema(description="Display all posts by all users"),
+    create=extend_schema(description="Create new post"),
+    retrieve=extend_schema(description="Display post with comments and likes"),
+    update=extend_schema(
+        description="Update post with the specified only if you are author"
+    ),
+    partial_update=extend_schema(
+        description="Update post with the specified only if you are author"
+    ),
+    destroy=extend_schema(
+        description="Delete post with the specified only if you are author"
+    ),
+)
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -51,16 +71,37 @@ class PostViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="tag",
+                description="Filter posts by tag",
+                required=False,
+                type=OpenApiTypes.STR,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
 class LikedPosts(APIView):
+    @extend_schema(
+        description="Display all posts liked by user",
+        responses=PostListSerializer,
+    )
     def get(self, request, *args, **kwargs):
         user = request.user
         posts = Post.objects.filter(likes__user=user)
-        serializer = PostSerializer(posts, many=True)
+        serializer = PostListSerializer(posts, many=True)
         return Response(serializer.data)
 
 
 class LikeUnlikePost(APIView):
+    @extend_schema(
+        description="Like or unlike(if already liked) post with specified id",
+        responses=OpenApiTypes.STR,
+    )
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
         user = request.user

@@ -1,5 +1,7 @@
 from django.contrib.auth import get_user_model, login, logout
 from django.contrib.auth.hashers import check_password
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
 from rest_framework import generics, mixins, viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.exceptions import ValidationError
@@ -17,6 +19,10 @@ from user.serializers import (
 )
 
 
+@extend_schema_view(
+    list=extend_schema(description="Display all users"),
+    retrieve=extend_schema(description="Display user with specified id"),
+)
 class UserViewSet(
     mixins.ListModelMixin,
     mixins.RetrieveModelMixin,
@@ -43,14 +49,35 @@ class UserViewSet(
 
         return UserSerializer
 
+    @extend_schema(
+        parameters=[
+            OpenApiParameter(
+                name="username",
+                description="Filter users by username",
+                type=OpenApiTypes.STR,
+                required=False,
+            )
+        ]
+    )
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
+
+@extend_schema(
+    description="Register with email, username and password",
+)
 class CreateUserView(generics.CreateAPIView):
     serializer_class = UserCreateSerializer
 
 
-class ManageUserView(generics.RetrieveUpdateAPIView):
+@extend_schema_view(
+    list=extend_schema(description="Display user profile"),
+    update=extend_schema(description="Update user profile"),
+    partial_update=extend_schema(description="Update user profile"),
+    delete=extend_schema(description="Delete user profile"),
+)
+class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_object(self):
         return self.request.user
@@ -91,6 +118,10 @@ class LoginUserView(APIView):
 
 
 class LogoutUserView(APIView):
+    @extend_schema(
+        description="Logout and delete user token",
+        responses=OpenApiTypes.STR,
+    )
     def get(self, request):
         request.user.auth_token.delete()
         logout(request)
@@ -99,6 +130,10 @@ class LogoutUserView(APIView):
 
 
 class FollowUnfollow(APIView):
+    @extend_schema(
+        description="Follow or unfollow(if already followed) user with specified id",
+        responses=OpenApiTypes.STR,
+    )
     def post(self, request, pk, *args, **kwargs):
         profile = User.objects.get(pk=pk)
 
@@ -110,6 +145,7 @@ class FollowUnfollow(APIView):
         return Response("You followed user - " + profile.username)
 
 
+@extend_schema(description="Display all user followers")
 class MyFollowersList(generics.ListAPIView):
     serializer_class = UserSerializer
 
@@ -117,6 +153,7 @@ class MyFollowersList(generics.ListAPIView):
         return self.request.user.followers.all()
 
 
+@extend_schema(description="Display all user following")
 class MyFollowingList(generics.ListAPIView):
     serializer_class = UserSerializer
 
