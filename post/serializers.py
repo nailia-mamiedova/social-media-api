@@ -35,6 +35,9 @@ class PostListSerializer(serializers.ModelSerializer):
     like = serializers.HyperlinkedIdentityField(
         view_name="post:like-unlike", lookup_field="pk"
     )
+    comment = serializers.HyperlinkedIdentityField(
+        view_name="post:comment", lookup_field="pk"
+    )
 
     class Meta:
         model = Post
@@ -49,11 +52,10 @@ class PostListSerializer(serializers.ModelSerializer):
             "likes",
             "comments",
             "like",
+            "comment",
         )
 
 
 class PostDetailSerializer(PostListSerializer):
     likes = serializers.StringRelatedField(many=True, read_only=True)
-    comments = serializers.SlugRelatedField(
-        many=True, read_only=True, slug_field="text"
-    )
+    comments = serializers.StringRelatedField(many=True, read_only=True)

@@ -61,3 +61,12 @@ class LikeUnlikePost(APIView):
             return Response("You unliked this post")
         post.likes.add(Like.objects.create(user=user, post=post))
         return Response("You liked this post")
+
+
+class CommentPost(APIView):
+    def post(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
+        user = request.user
+        text = request.data.get("text")
+        Comment.objects.create(user=user, post=post, text=text)
+        return Response("You comment has been added")
