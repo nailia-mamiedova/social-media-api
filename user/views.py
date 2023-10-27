@@ -72,9 +72,9 @@ class CreateUserView(generics.CreateAPIView):
 
 
 @extend_schema_view(
-    retrieve=extend_schema(description="Display user profile"),
-    update=extend_schema(description="Update user profile"),
-    partial_update=extend_schema(description="Update user profile"),
+    get=extend_schema(description="Display user profile"),
+    put=extend_schema(description="Update user profile"),
+    patch=extend_schema(description="Update user profile"),
     delete=extend_schema(description="Delete user profile"),
 )
 class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
@@ -152,20 +152,29 @@ class LogoutUserView(APIView):
         return Response({"message": "User Logged out successfully"})
 
 
-class FollowUnfollow(APIView):
-    @extend_schema(
+@extend_schema_view(
+    post=extend_schema(
         description="Follow or unfollow(if already followed) user with specified id",
-        responses=OpenApiTypes.STR,
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string"},
+                },
+            },
+        },
     )
+)
+class FollowUnfollow(APIView):
     def post(self, request, pk, *args, **kwargs):
         profile = User.objects.get(pk=pk)
 
         if request.user in profile.followers.all():
             profile.followers.remove(request.user)
-            return Response("You unfollowed user - " + profile.username)
+            return Response({"message": "You unfollowed user - " + profile.username})
 
         profile.followers.add(request.user)
-        return Response("You followed user - " + profile.username)
+        return Response({"message": "You followed user - " + profile.username})
 
 
 @extend_schema(description="Display all user followers")
