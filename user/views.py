@@ -32,7 +32,7 @@ class UserViewSet(
         if username:
             queryset = queryset.filter(username__icontains=username)
 
-        return queryset
+        return queryset.exclude(pk=self.request.user.pk)
 
     def get_serializer_class(self):
         if self.action == "list":

@@ -47,21 +47,30 @@ class UserCreateSerializer(UserSerializer):
 
 
 class UserListSerializer(UserSerializer):
+    follow = serializers.SerializerMethodField()
     follow_unfollow = serializers.HyperlinkedIdentityField(
         view_name="user:follow-unfollow",
     )
 
+    def get_follow(self, obj):
+        request = self.context.get("request")
+        if request:
+            return request.user in obj.followers.all()
+        return False
+
     class Meta:
         model = get_user_model()
         fields = (
+            "id",
             "username",
             "first_name",
             "last_name",
+            "follow",
             "follow_unfollow",
         )
 
 
-class UserDetailSerializer(UserSerializer):
+class UserDetailSerializer(UserListSerializer):
     class Meta:
         model = get_user_model()
         fields = (
@@ -73,5 +82,6 @@ class UserDetailSerializer(UserSerializer):
             "bio",
             "picture",
             "is_staff",
+            "follow",
             "follow_unfollow",
         )
