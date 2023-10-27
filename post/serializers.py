@@ -18,7 +18,7 @@ class CommentSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ("id", "post", "user", "created_at")
+        fields = ("id", "created_at")
 
 
 class PostSerializer(serializers.ModelSerializer):

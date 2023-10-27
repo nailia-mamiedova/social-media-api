@@ -6,13 +6,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from post.models import Post, Tag, Comment, Like
+from post.models import Post, Tag, Like
 from post.serializers import (
     PostSerializer,
     TagSerializer,
     PostListSerializer,
     PostDetailSerializer,
     CommentSerializer,
+    LikeSerializer,
 )
 from post.permissions import IsAuthorOrReadOnly
 
@@ -98,21 +99,25 @@ class LikedPosts(APIView):
         return Response(serializer.data)
 
 
-class LikeUnlikePost(APIView):
-    @extend_schema(
+@extend_schema_view(
+    post=extend_schema(
         description="Like or unlike(if already liked) post with specified id",
-        responses=OpenApiTypes.STR,
     )
-    def post(self, request, pk, *args, **kwargs):
-        post = Post.objects.get(pk=pk)
-        user = request.user
-        if Like.objects.filter(user=user, post=post).exists():
-            Like.objects.filter(user=user, post=post).delete()
-            return Response("You unliked this post")
-        post.likes.add(Like.objects.create(user=user, post=post))
-        return Response("You liked this post")
+)
+class LikeUnlikePost(generics.CreateAPIView):
+    serializer_class = LikeSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            user=self.request.user, post=Post.objects.get(pk=self.kwargs["pk"])
+        )
 
 
+@extend_schema_view(
+    post=extend_schema(
+        description="Add comment to post with specified id",
+    )
+)
 class CommentPost(generics.CreateAPIView):
     serializer_class = CommentSerializer
 
