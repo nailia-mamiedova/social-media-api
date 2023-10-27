@@ -1,0 +1,129 @@
+[
+    {"model": "post.tag", "pk": 1, "fields": {"name": "nature"}},
+    {"model": "post.tag", "pk": 2, "fields": {"name": "rain"}},
+    {"model": "post.tag", "pk": 3, "fields": {"name": "beauty"}},
+    {"model": "post.tag", "pk": 4, "fields": {"name": "python"}},
+    {"model": "post.tag", "pk": 5, "fields": {"name": "programming"}},
+    {
+        "model": "post.post",
+        "pk": 1,
+        "fields": {
+            "title": "Autumn Rain: A Season's Whisper",
+            "content": "Autumn rain paints the world with a melancholic beauty. As leaves turn vibrant hues, each drop amplifies their colors, blending nostalgia with nature's rhythm. This rain whispers of summer's end, yet promises winter's embrace. Amidst the cool drizzles, we're reminded to pause, reflect, and cherish the transient moments of life.",
+            "created_at": "2023-10-27T09:11:28.171Z",
+            "author": 2,
+            "picture": "uploads/posts/autumn-rain-a-seasons-whisper-f016c71e-4d66-423b-92eb-2f906dc137ad.jpg",
+            "tags": [1, 2]
+        }
+    },
+    {
+        "model": "post.post",
+        "pk": 2,
+        "fields": {
+            "title": "Python: Power and Simplicity Combined",
+            "content": "Python stands out in the programming world with its clean syntax and vast libraries. Ideal for beginners, it's also a powerhouse for advanced tasks, from web development with Django to AI with TensorFlow. Its versatility makes it a top choice for diverse projects.",
+            "created_at": "2023-10-27T09:20:49.265Z",
+            "author": 3,
+            "picture": "uploads/posts/python-power-and-simplicity-combined-712cae62-559f-4d57-a8b9-0c1ba3b8313b.jpeg",
+            "tags": [4, 5]
+        }
+    },
+    {
+        "model": "post.comment",
+        "pk": 1,
+        "fields": {
+            "text": "Cool post, I like it",
+            "created_at": "2023-10-27T11:31:11.042Z",
+            "post": 1,
+            "user": 3
+        }
+    },
+    {
+        "model": "post.comment",
+        "pk": 2,
+        "fields": {
+            "text": "Disagree, I like autumn",
+            "created_at": "2023-10-27T14:31:40.017Z",
+            "post": 1,
+            "user": 1
+        }
+    },
+    {
+        "model": "post.like",
+        "pk": 7,
+        "fields": {"post": 2, "user": 3, "created_at": "2023-10-27T10:28:16.748Z"}
+    },
+    {
+        "model": "post.like",
+        "pk": 8,
+        "fields": {"post": 1, "user": 3, "created_at": "2023-10-27T11:31:25.812Z"}
+    },
+    {
+        "model": "post.like",
+        "pk": 9,
+        "fields": {"post": 2, "user": 1, "created_at": "2023-10-27T13:52:23.888Z"}
+    },
+    {
+        "model": "user.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$0fEK32wp2JVASWhjnNeqEE$AjYXCfsaumxn14WjZF1+Ex22yddDP4vt3Jzs3JT2mRs=",
+            "last_login": "2023-10-27T14:48:16.159Z",
+            "is_superuser": true,
+            "first_name": "Admin",
+            "last_name": "",
+            "is_staff": true,
+            "is_active": true,
+            "date_joined": "2023-10-24T14:10:24Z",
+            "email": "admin@gmail.com",
+            "username": "admin",
+            "bio": "I'm admin of this site",
+            "picture": "",
+            "groups": [],
+            "user_permissions": [],
+            "following": [2]
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$M4bKNCoydEFEB4UqZ5yrsD$jve7KqzzPzRBp8U8GhaYVu+RPfS28FYBSOyYqbCOLIk=",
+            "last_login": "2023-10-27T09:04:03.173Z",
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-10-24T15:36:44.292Z",
+            "email": "user@gmail.com",
+            "username": "user",
+            "bio": "",
+            "picture": "",
+            "groups": [],
+            "user_permissions": [],
+            "following": [1]
+        }
+    },
+    {
+        "model": "user.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$U2bHh6Y8l12kAESGAVv9ZB$MZodrcGAhX57GfhyMqA1kgQ06fTFNFo3IHu8ZVlBQWM=",
+            "last_login": "2023-10-27T09:15:20.001Z",
+            "is_superuser": false,
+            "first_name": "",
+            "last_name": "",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2023-10-24T15:41:46.962Z",
+            "email": "new.user@gmail.com",
+            "username": "new_user",
+            "bio": null,
+            "picture": "",
+            "groups": [],
+            "user_permissions": [],
+            "following": [1, 2]
+        }
+    }
+]
