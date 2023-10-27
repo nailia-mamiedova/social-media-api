@@ -1,7 +1,7 @@
 from django.db.models import Q
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema_view
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -12,6 +12,7 @@ from post.serializers import (
     TagSerializer,
     PostListSerializer,
     PostDetailSerializer,
+    CommentSerializer,
 )
 from post.permissions import IsAuthorOrReadOnly
 
@@ -112,10 +113,10 @@ class LikeUnlikePost(APIView):
         return Response("You liked this post")
 
 
-class CommentPost(APIView):
-    def post(self, request, pk, *args, **kwargs):
-        post = Post.objects.get(pk=pk)
-        user = request.user
-        text = request.data.get("text")
-        Comment.objects.create(user=user, post=post, text=text)
-        return Response("You comment has been added")
+class CommentPost(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(
+            user=self.request.user, post=Post.objects.get(pk=self.kwargs["pk"])
+        )

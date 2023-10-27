@@ -12,7 +12,7 @@ class TagSerializer(serializers.ModelSerializer):
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ("id", "text", "created_at", "post", "user")
+        fields = ("id", "text", "created_at")
 
 
 class LikeSerializer(serializers.ModelSerializer):
