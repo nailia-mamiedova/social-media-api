@@ -60,4 +60,4 @@ class Like(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user} liked {self.post} at {self.created_at}"
+        return f"Liked by {self.user} at {self.created_at}"

@@ -1,6 +1,8 @@
 from django.db.models import Q
 from rest_framework import viewsets, mixins
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from post.models import Post, Tag, Comment, Like
 from post.serializers import (
@@ -48,3 +50,14 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+
+class LikeUnlikePost(APIView):
+    def post(self, request, pk, *args, **kwargs):
+        post = Post.objects.get(pk=pk)
+        user = request.user
+        if Like.objects.filter(user=user, post=post).exists():
+            Like.objects.filter(user=user, post=post).delete()
+            return Response("You unliked this post")
+        post.likes.add(Like.objects.create(user=user, post=post))
+        return Response("You liked this post")

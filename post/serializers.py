@@ -32,6 +32,9 @@ class PostListSerializer(serializers.ModelSerializer):
     tags = serializers.SlugRelatedField(many=True, read_only=True, slug_field="name")
     likes = serializers.IntegerField(source="likes.count")
     comments = serializers.IntegerField(source="comments.count")
+    like = serializers.HyperlinkedIdentityField(
+        view_name="post:like-unlike", lookup_field="pk"
+    )
 
     class Meta:
         model = Post
@@ -45,6 +48,7 @@ class PostListSerializer(serializers.ModelSerializer):
             "author",
             "likes",
             "comments",
+            "like",
         )
 
 
