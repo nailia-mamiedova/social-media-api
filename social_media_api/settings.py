@@ -143,7 +143,10 @@ REST_FRAMEWORK = {
 
 SPECTACULAR_SETTINGS = {
     "TITLE": "Social Media API",
-    "DESCRIPTION": "",
+    "DESCRIPTION": "RESTful API for a social media platform, "
+    "enabling profile creation, following users, "
+    "managing posts, likes, comments, and other "
+    "basic social interactions.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
