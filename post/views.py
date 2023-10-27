@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.db.models import Q
 from rest_framework import viewsets, mixins
+from rest_framework.permissions import IsAuthenticated
 
 from post.models import Post, Tag, Comment, Like
 from post.serializers import (
@@ -8,6 +9,7 @@ from post.serializers import (
     PostListSerializer,
     PostDetailSerializer,
 )
+from post.permissions import IsAuthorOrReadOnly
 
 
 class TagViewSet(
@@ -20,9 +22,20 @@ class TagViewSet(
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    # permission_classes = [IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
-    # filter_backends = [filters.SearchFilter]
-    # search_fields = ["=author__username", "=tags__name"]
+    permission_classes = [IsAuthorOrReadOnly, IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = self.queryset
+
+        tag = self.request.query_params.get("tag")
+        if tag:
+            queryset = queryset.filter(tags__name__icontains=tag)
+
+        queryset = queryset.filter(
+            Q(author__followers=self.request.user) | Q(author=self.request.user)
+        )
+
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":

@@ -4,8 +4,8 @@ from rest_framework import routers
 from post.views import PostViewSet, TagViewSet
 
 route = routers.DefaultRouter()
-route.register("post", PostViewSet, basename="post")
-route.register("tag", TagViewSet)
+route.register("posts", PostViewSet)
+route.register("tags", TagViewSet)
 
 urlpatterns = [path("", include(route.urls))]
 
