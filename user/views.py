@@ -72,7 +72,7 @@ class CreateUserView(generics.CreateAPIView):
 
 
 @extend_schema_view(
-    list=extend_schema(description="Display user profile"),
+    retrieve=extend_schema(description="Display user profile"),
     update=extend_schema(description="Update user profile"),
     partial_update=extend_schema(description="Update user profile"),
     delete=extend_schema(description="Delete user profile"),
@@ -84,6 +84,21 @@ class ManageUserView(generics.RetrieveUpdateDestroyAPIView):
         return self.request.user
 
 
+@extend_schema_view(
+    post=extend_schema(
+        description="Login with email and password",
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string"},
+                    "email_address": {"type": "string"},
+                    "token": {"type": "string"},
+                },
+            },
+        },
+    )
+)
 class LoginUserView(GenericAPIView):
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
