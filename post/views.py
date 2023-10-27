@@ -52,6 +52,14 @@ class PostViewSet(viewsets.ModelViewSet):
         serializer.save(author=self.request.user)
 
 
+class LikedPosts(APIView):
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        posts = Post.objects.filter(likes__user=user)
+        serializer = PostSerializer(posts, many=True)
+        return Response(serializer.data)
+
+
 class LikeUnlikePost(APIView):
     def post(self, request, pk, *args, **kwargs):
         post = Post.objects.get(pk=pk)
