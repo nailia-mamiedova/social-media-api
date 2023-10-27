@@ -85,3 +85,8 @@ class UserDetailSerializer(UserListSerializer):
             "follow",
             "follow_unfollow",
         )
+
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
