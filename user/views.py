@@ -131,16 +131,25 @@ class LoginUserView(GenericAPIView):
             raise ValidationError({"non_field_errors": "Account not active"})
 
 
-class LogoutUserView(APIView):
-    @extend_schema(
+@extend_schema_view(
+    get=extend_schema(
         description="Logout and delete user token",
-        responses=OpenApiTypes.STR,
+        responses={
+            200: {
+                "type": "object",
+                "properties": {
+                    "message": {"type": "string"},
+                },
+            }
+        },
     )
+)
+class LogoutUserView(APIView):
     def get(self, request):
         request.user.auth_token.delete()
         logout(request)
 
-        return Response("User Logged out successfully")
+        return Response({"message": "User Logged out successfully"})
 
 
 class FollowUnfollow(APIView):
