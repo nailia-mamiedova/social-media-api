@@ -69,6 +69,7 @@ class UserViewSet(
 )
 class CreateUserView(generics.CreateAPIView):
     serializer_class = UserCreateSerializer
+    permission_classes = [AllowAny]
 
 
 @extend_schema_view(
