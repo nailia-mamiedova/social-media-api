@@ -7,6 +7,8 @@ create posts, and manage their profiles.
 
 ## Description
 
+---
+
 This API facilitates the core functionalities of a social media platform. 
 Users can create profiles, follow others, manage posts, 
 and engage in basic social media actions.
@@ -96,6 +98,8 @@ You can use existing credentials to log in to the API, or create a new account.
 
 ## Features
 
+---
+
 ### User Registration and Authentication:
 
 - **Register:** Users can sign up using their email, username, and password.
@@ -143,8 +147,20 @@ You can use existing credentials to log in to the API, or create a new account.
   - Endpoint: _api/user/me_, _api/post/posts/<pk>_
 
 ## API Documentation:
-- Documentation: Comprehensive API documentation is available, detailing the usage of each endpoint.
-  - Tool Used: drf-spectacular
-  - Endpoint: /api/schema/swagger/ or /api/schema/redoc/
-- Samples: The documentation provides sample requests and responses for various endpoints.
 
+---
+
+- **Documentation:** Comprehensive API documentation is available, detailing the usage of each endpoint.
+  - Tool Used: _drf-spectacular_
+  - Endpoint: /api/schema/swagger/ or /api/schema/redoc/
+- **Samples:** The documentation provides sample requests and responses for various endpoints.
+
+### API Endpoints
+
+#### 1. Post App Endpoints
+
+![post-app-endpoints.png](post-app-endpoints.png)
+
+#### 2. User App Endpoints
+
+![user-app-endpoints.png](user-app-endpoints.png)
