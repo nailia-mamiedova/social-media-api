@@ -102,6 +102,14 @@ class LikedPosts(APIView):
 @extend_schema_view(
     post=extend_schema(
         description="Like or unlike(if already liked) post with specified id",
+        responses={
+            201: {
+                "type": "object",
+                "properties": {
+                    "detail": {"type": "string"},
+                },
+            },
+        },
     )
 )
 class LikeUnlikePost(generics.CreateAPIView):
