@@ -107,6 +107,19 @@ class LikedPosts(APIView):
 class LikeUnlikePost(generics.CreateAPIView):
     serializer_class = LikeSerializer
 
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        post = Post.objects.get(pk=self.kwargs["pk"])
+        like = Like.objects.filter(user=user, post=post).first()
+        if like:
+            like.delete()
+            return Response({"detail": "You unliked this post"})
+        else:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save(user=user, post=post)
+            return Response({"detail": "You liked this post"})
+
     def perform_create(self, serializer):
         serializer.save(
             user=self.request.user, post=Post.objects.get(pk=self.kwargs["pk"])
