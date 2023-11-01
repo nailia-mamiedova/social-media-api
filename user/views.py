@@ -157,7 +157,7 @@ class LogoutUserView(APIView):
     post=extend_schema(
         description="Follow or unfollow(if already followed) user with specified id",
         responses={
-            200: {
+            201: {
                 "type": "object",
                 "properties": {
                     "message": {"type": "string"},
