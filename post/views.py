@@ -87,16 +87,14 @@ class PostViewSet(viewsets.ModelViewSet):
         return super().list(request, *args, **kwargs)
 
 
-class LikedPosts(APIView):
-    @extend_schema(
-        description="Display all posts liked by user",
-        responses=PostListSerializer,
-    )
-    def get(self, request, *args, **kwargs):
-        user = request.user
-        posts = Post.objects.filter(likes__user=user)
-        serializer = PostListSerializer(posts, many=True)
-        return Response(serializer.data)
+@extend_schema_view(
+    get=extend_schema(description="Display all posts by user"),
+)
+class LikedPosts(generics.ListAPIView):
+    serializer_class = PostListSerializer
+
+    def get_queryset(self):
+        return Post.objects.filter(likes__user=self.request.user)
 
 
 @extend_schema_view(
