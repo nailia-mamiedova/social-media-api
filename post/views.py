@@ -4,7 +4,6 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter, extend_schema
 from rest_framework import viewsets, mixins, generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from post.models import Post, Tag, Like
 from post.serializers import (
@@ -101,7 +100,7 @@ class LikedPosts(generics.ListAPIView):
     post=extend_schema(
         description="Like or unlike(if already liked) post with specified id",
         responses={
-            201: {
+            200: {
                 "type": "object",
                 "properties": {
                     "detail": {"type": "string"},
