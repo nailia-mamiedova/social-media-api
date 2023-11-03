@@ -1,21 +1,15 @@
 # Social Media API
 
----
-
 A RESTful API for a social media platform, allowing users to interact, 
 create posts, and manage their profiles.
 
 ## Description
-
----
 
 This API facilitates the core functionalities of a social media platform. 
 Users can create profiles, follow others, manage posts, 
 and engage in basic social media actions.
 
 ## Setup and Installation
-
----
 
 Follow these steps to set up and run the Social Media API project:
 
@@ -98,8 +92,6 @@ You can use existing credentials to log in to the API, or create a new account.
 
 ## Features
 
----
-
 ### User Registration and Authentication:
 
 - **Register:** Users can sign up using their email, username, and password.
@@ -147,8 +139,6 @@ You can use existing credentials to log in to the API, or create a new account.
   - Endpoint: _api/user/me_, _api/post/posts/<pk>_
 
 ## API Documentation:
-
----
 
 - **Documentation:** Comprehensive API documentation is available, detailing the usage of each endpoint.
   - Tool Used: _drf-spectacular_
